@@ -1,15 +1,20 @@
 trigger:
-- main
+none
 
 pool:
   vmImage: 'ubuntu-latest'
 
 variables:
   usersToCheck: 'username1 username2'
+  vmName: 'nombre-de-tu-vm' # Nombre de tu máquina virtual en Azure
 
 steps:
-- task: Bash@3
+- task: AzureVMExtension@0
   inputs:
-    targetType: 'inline'
-    script: |
-      ./script.sh $(echo $usersToCheck)
+    azureSubscription: 'Nombre de tu suscripción Azure'
+    action: 'Run Shell Script on VMs'
+    resourceGroup: 'Nombre de tu grupo de recursos'
+    vms: '$(vmName)' # Usando la variable vmName para especificar el nombre de la VM
+    scriptType: 'bash'
+    scriptPath: 'ruta-al-script-en-tu-repositorio' # Ruta al script bash en tu repositorio
+    scriptArguments: '$(usersToCheck)' # Pasando los usuarios a verificar como argumento al script
