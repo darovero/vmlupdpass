@@ -1,18 +1,13 @@
+#!/bin/bash
+
 # Function to print password expiration for a single user
-function Check-User {
-    param(
-        [string]$Username
-    )
-    $ResourceGroupName = 'YourResourceGroup'  # Reemplaza con el nombre de tu grupo de recursos
-    $VMName = 'YourVMName'  # Reemplaza con el nombre de tu máquina virtual
-    $Command = "/usr/sbin/chage -l $Username | grep 'Password expires' | awk -F': ' '{print $2}'"
-    $Output = Invoke-AzVMRunCommand -ResourceGroupName $ResourceGroupName -VMName $VMName -CommandId 'RunShellScript' -Script $Command
-    $ExpirationDate = $Output.Value
-    Write-Output "Password expiration for user $Username: $ExpirationDate"
+check_user() {
+    local username=$1
+    local expiration_date=$(az vm run-command invoke --resource-group devvmlab0_group --name devvmlab0_group --command-id RunShellScript --scripts "/usr/sbin/chage -l $username | grep 'Password expires' | awk -F': ' '{print \$2}'")
+    echo "Password expiration for user $username: $expiration_date"
 }
 
 # Check password expiration for each user provided as argument
-$Usernames = @('davidv', 'darovero')  # Reemplaza con los nombres de usuario reales
-foreach ($Username in $Usernames) {
-    Check-User -Username $Username
-}
+for username in "$@"; do
+    check_user $username
+done
