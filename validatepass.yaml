@@ -9,7 +9,7 @@ jobs:
   - task: AzurePowerShell@5
     displayName: 'Azure PowerShell script'
     inputs:
-      azureSubscription: 'YourAzureSubscription'  # Replace 'YourAzureSubscription' with the name of your Azure subscription service connection in Azure DevOps
+      azureSubscription: 'all_spn'  # Replace 'YourAzureSubscription' with the name of your Azure subscription service connection in Azure DevOps
       ScriptType: 'FilePath'
       ScriptPath: '$(Build.SourcesDirectory)/scripts/check_password_expiry.ps1'  # Path to your PowerShell script
       azurePowerShellVersion: 'LatestVersion'
