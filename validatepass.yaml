@@ -2,18 +2,24 @@ trigger:
 - main
 
 parameters:
-- name: user
+- name: users_name
+  displayname: 'Users Name'
   type: string
-  default: 'davidv'
 - name: resource_group
+  displayname: 'Resource Group Name'
   type: string
-  default: 'devvmlab0_group'
 - name: vm_name
+  displayname: 'Virtual Machine Name'
   type: string
-  default: 'devvmlab03'
-- name: azureSubscription
+- name: environment
+  displayName: 'Environment'
   type: string
-  default: 'Nombre de tu conexión de servicio'  # Reemplaza con el nombre de tu conexión de servicio en Azure DevOps
+  values:
+  - 'Non-Prod'
+  - 'Prod'
+
+variables:
+  - group: ${{ parameters.environment }}
 
 jobs:
 - job: RunAzureCLI
@@ -31,8 +37,12 @@ jobs:
       azureSubscription: '$(azureSubscription)'
       scriptLocation: 'inlineScript'
       inlineScript: |
-        az vm run-command invoke \
-            --resource-group $(resource_group) \
-            --name $(vm_name) \
-            --command-id RunShellScript \
-            --scripts "sudo chage -l $(user) | grep 'Password expires' | awk -F': ' '{print \"User: $(user), Password expires: \" \$2}'"
+        IFS=',' read -ra users <<< "$(usersList)"
+        for user in "${users[@]}"; do
+          az vm run-command invoke \
+              --resource-group $(resource_group) \
+              --name $(vm_name) \
+              --command-id RunShellScript \
+              --scripts "sudo chage -l $user | grep 'Password expires' | awk -F': ' '{print \"User: $user, Password expires: \" \$2}'"
+        done
+    displayName: 'Execute script for validate Password expirate date'
