@@ -1,15 +1,12 @@
 trigger:
 - none
 
+pool:
+  vmImage: 'windows-latest'
+
 parameters:
-- name: users_name
-  displayname: 'Users Name'
-  type: string
-- name: resource_group
-  displayname: 'Resource Group Name'
-  type: string
-- name: vm_name
-  displayname: 'Virtual Machine Name'
+- name: resourcegroup
+  displayName: 'Resource Group Name'
   type: string
 - name: environment
   displayName: 'Environment'
@@ -17,6 +14,10 @@ parameters:
   values:
   - 'Non-Prod'
   - 'Prod'
+- name: tagsToFilter
+  displayName: 'Tags to Filter'
+  type: string
+  default: 'owner,environment,BUILDING_BLOCK'
 
 variables:
   - group: ${{ parameters.environment }}
