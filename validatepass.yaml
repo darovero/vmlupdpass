@@ -40,5 +40,5 @@ jobs:
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
-        az vm run-command invoke --resource-group 'devvmlab0_group' --name 'devvmlab03' --command-id RunShellScript --scripts "sudo chage -l '$(users_name)' | grep 'Password expires' | awk -F': ' '{print \"User: 'users_name', Password expires: \" \$2}'"
+        az vm run-command invoke --resource-group 'devvmlab0_group' --name 'devvmlab03' --command-id RunShellScript --scripts "sudo chage -l '${{parameters.users_name}}' | grep 'Password expires' | awk -F': ' '{print \"User: '${{parameters.users_name}}', Password expires: \" \$2}'"
     displayName: 'Run Azure CLI command for multiple users'
