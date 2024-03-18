@@ -8,7 +8,6 @@ parameters:
 - name: users_name
   displayName: 'Users Name'
   type: string
-  default: 'davidv'
 # - name: resourcegroup
 #   displayName: 'Resource Group Name'
 #   type: string
