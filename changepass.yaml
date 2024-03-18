@@ -45,4 +45,5 @@ jobs:
           --name '${{parameters.vm_name}}' \
           --username '${{parameters.users_name}}' \
           --password '${{parameters.password}}'
+          echo "The password change of the ${{parameters.users_name}} user was successful."
     displayName: 'Run Azure CLI command for change password linux user'
