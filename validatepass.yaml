@@ -38,9 +38,10 @@ jobs:
   - task: AzureCLI@2
     inputs:
       azureSubscription: '$(azureSubscription)'
+      scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
-        IFS=',' read -ra users <<< "$(users_name)"
+        IFS=',' read -ra users <<< "$(usersList)"
         for user in "${users[@]}"; do
           az vm run-command invoke \
               --resource-group $(resource_group) \
@@ -48,4 +49,4 @@ jobs:
               --command-id RunShellScript \
               --scripts "sudo chage -l $user | grep 'Password expires' | awk -F': ' '{print \"User: $user, Password expires: \" \$2}'"
         done
-    displayName: 'Execute script for validate Password expirate date'
+    displayName: 'Run Azure CLI command for multiple users'
