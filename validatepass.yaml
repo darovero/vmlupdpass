@@ -1,17 +1,38 @@
-trigger: none
+trigger:
+- main
+
+parameters:
+- name: user
+  type: string
+  default: 'davidv'
+- name: resource_group
+  type: string
+  default: 'devvmlab0_group'
+- name: vm_name
+  type: string
+  default: 'devvmlab03'
+- name: azureSubscription
+  type: string
+  default: 'Nombre de tu conexión de servicio'  # Reemplaza con el nombre de tu conexión de servicio en Azure DevOps
 
 jobs:
-- job: CheckPasswordExpiry
-  displayName: 'Check Password Expiry'
+- job: RunAzureCLI
   pool:
     vmImage: 'ubuntu-latest'
+
   steps:
-  - checkout: self
-  - task: AzureCLI@2
-    displayName: 'Run Azure CLI script'
+  - task: UsePythonVersion@0
     inputs:
-      azureSubscription: 'all_spn'  # Reemplaza con el nombre de tu conexión de suscripción Azure
-      scriptType: 'bash'
-      scriptLocation: 'scriptPath'
-      scriptPath: '$(Build.SourcesDirectory)/scripts/check_password_expiry.sh'
-      arguments: 'davovero davidv'  # Reemplaza con los nombres de usuario reales
+      versionSpec: '3.x'
+      addToPath: true
+
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: '$(azureSubscription)'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az vm run-command invoke \
+            --resource-group $(resource_group) \
+            --name $(vm_name) \
+            --command-id RunShellScript \
+            --scripts "sudo chage -l $(user) | grep 'Password expires' | awk -F': ' '{print \"User: $(user), Password expires: \" \$2}'"
