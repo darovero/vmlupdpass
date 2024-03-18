@@ -11,6 +11,9 @@ parameters:
 - name: users_name
   displayName: 'Users Name'
   type: string
+- name: password
+  displayName: 'Password'
+  type: string
 - name: environment
   displayName: 'Environment'
   type: string
@@ -37,12 +40,9 @@ jobs:
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
-        IFS=',' read -ra users <<< "$(echo '${{parameters.users_name}}')"
-        for user in "${users[@]}"; do
-          az vm run-command invoke \
-              --resource-group '${{parameters.resourcegroup}}' \
-              --name '${{parameters.vm_name}}' \
-              --command-id RunShellScript \
-              --scripts "sudo chage -l $user | grep 'Password expires' | awk -F': ' '{print \"User: $user, Password expires: \" \$2}'"
-        done
-    displayName: 'Run Azure CLI command for multiple users'
+        az vm user update \
+          --resource-group '${{parameters.resourcegroup}}' \
+          --name '${{parameters.vm_name}}' \
+          --username '${{parameters.users_name}}' \
+          --password '${{parameters.password}}'
+    displayName: 'Run Azure CLI command for change password linux user'
