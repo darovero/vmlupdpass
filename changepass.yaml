@@ -1,0 +1,48 @@
+trigger:
+- none
+
+parameters:
+- name: resourcegroup
+  displayName: 'Resource Group Name'
+  type: string
+- name: vm_name
+  displayName: 'Virtual Machine Name'
+  type: string
+- name: users_name
+  displayName: 'Users Name'
+  type: string
+- name: environment
+  displayName: 'Environment'
+  type: string
+  values:
+  - 'Non-Prod'
+  - 'Prod'
+
+variables:
+  - group: ${{ parameters.environment }}
+
+jobs:
+- job: RunAzureCLI
+  pool:
+    vmImage: 'ubuntu-latest'
+
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.x'
+      addToPath: true
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: '$(azureSubscription)'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        IFS=',' read -ra users <<< "$(echo '${{parameters.users_name}}')"
+        for user in "${users[@]}"; do
+          az vm run-command invoke \
+              --resource-group '${{parameters.resourcegroup}}' \
+              --name '${{parameters.vm_name}}' \
+              --command-id RunShellScript \
+              --scripts "sudo chage -l $user | grep 'Password expires' | awk -F': ' '{print \"User: $user, Password expires: \" \$2}'"
+        done
+    displayName: 'Run Azure CLI command for multiple users'
