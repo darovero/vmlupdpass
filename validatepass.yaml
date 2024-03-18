@@ -5,14 +5,14 @@ pool:
   vmImage: 'windows-latest'
 
 parameters:
-- name: users_name
-  displayName: 'Users Name'
-  type: string
 - name: resourcegroup
   displayName: 'Resource Group Name'
   type: string
 - name: vm_name
   displayName: 'Virtual Machine Name'
+  type: string
+- name: users_name
+  displayName: 'Users Name'
   type: string
 - name: environment
   displayName: 'Environment'
