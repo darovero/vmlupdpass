@@ -41,7 +41,7 @@ jobs:
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
-        IFS=',' read -ra users <<< "$(usersList)"
+        IFS=',' read -ra users <<< "$(echo $(usersList))"
         for user in "${users[@]}"; do
           az vm run-command invoke \
               --resource-group $(resource_group) \
