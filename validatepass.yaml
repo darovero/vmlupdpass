@@ -1,9 +1,6 @@
 trigger:
 - none
 
-pool:
-  vmImage: 'windows-latest'
-
 parameters:
 - name: resourcegroup
   displayName: 'Resource Group Name'
