@@ -4,17 +4,17 @@ trigger:
 pool:
   vmImage: 'windows-latest'
 
-parameters:
-- name: users_name
-  displayName: 'Users Name'
-  type: string
-  default: 'davidv'
-- name: resourcegroup
-  displayName: 'Resource Group Name'
-  type: string
-- name: vm_name
-  displayName: 'Virtual Machine Name'
-  type: string
+# parameters:
+# - name: users_name
+#   displayName: 'Users Name'
+#   type: string
+#   default: 'davidv'
+# - name: resourcegroup
+#   displayName: 'Resource Group Name'
+#   type: string
+# - name: vm_name
+#   displayName: 'Virtual Machine Name'
+#   type: string
 - name: environment
   displayName: 'Environment'
   type: string
@@ -41,5 +41,5 @@ jobs:
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
-        az vm run-command invoke --resource-group $(resource_group) --name $(vm_name) --command-id RunShellScript --scripts "sudo chage -l $(users_name) | grep 'Password expires' | awk -F': ' '{print \"User: $(user), Password expires: \" \$2}'"
+        az vm run-command invoke --resource-group 'devvmlab0_group' --name 'devvmlab03' --command-id RunShellScript --scripts "sudo chage -l 'davidv' | grep 'Password expires' | awk -F': ' '{print \"User: $(user), Password expires: \" \$2}'"
     displayName: 'Run Azure CLI command for multiple users'
