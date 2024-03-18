@@ -8,16 +8,18 @@ parameters:
 - name: users_name
   displayName: 'Users Name'
   type: string
+- name: resourcegroup
+  displayName: 'Resource Group Name'
+  type: string
+- name: vm_name
+  displayName: 'Virtual Machine Name'
+  type: string
 - name: environment
   displayName: 'Environment'
   type: string
   values:
   - 'Non-Prod'
   - 'Prod'
-- name: tagsToFilter
-  displayName: 'Tags to Filter'
-  type: string
-  default: 'owner,environment,BUILDING_BLOCK'
 
 variables:
   - group: ${{ parameters.environment }}
