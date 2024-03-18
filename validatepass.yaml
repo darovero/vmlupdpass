@@ -8,6 +8,7 @@ parameters:
 - name: users_name
   displayName: 'Users Name'
   type: string
+  default: 'davidv,darovero'
 - name: resourcegroup
   displayName: 'Resource Group Name'
   type: string
@@ -34,14 +35,13 @@ jobs:
     inputs:
       versionSpec: '3.x'
       addToPath: true
-
   - task: AzureCLI@2
     inputs:
       azureSubscription: '$(azureSubscription)'
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
-        IFS=',' read -ra users <<< "$(users_name)"
+        IFS=',' read -ra users <<< "$(usersList)"
         for user in "${users[@]}"; do
           az vm run-command invoke \
               --resource-group $(resource_group) \
