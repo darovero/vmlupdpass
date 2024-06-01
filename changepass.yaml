@@ -59,13 +59,9 @@ jobs:
           echo "The password change of the ${{parameters.users_name}} user was successful."
 
         # Create secrets in Key Vault
-        az keyvault secret set \
-          --name '${{parameters.vm_name}}-${{parameters.users_name}}' \
-          --vault-name '$(keyVaultName)' \
-          --value 'your-secret-value'
 
         az keyvault secret set \
-          --name '${{parameters.vm_name}}-password' \
+          --name '${{parameters.vm_name}}-password-${{parameters.users_name}}'' \
           --vault-name '$(keyVaultName)' \
-          --value 'your-password'
+          --value '$(NewPassword)'
     displayName: 'Run Command for change password user and create secrets in Key Vault'
