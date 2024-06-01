@@ -42,9 +42,10 @@ jobs:
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
+        IFS=',' read -ra users <<< "$(echo '${{parameters.users_name}}')"
+        
         # set the specific subscription to work with
         az account set --subscription '${{parameters.subscriptionid}}')"
-        IFS=',' read -ra users <<< "$(echo '${{parameters.users_name}}')"
         for user in "${users[@]}"; do
           az vm run-command invoke \
               --resource-group '${{parameters.resourcegroup}}' \
