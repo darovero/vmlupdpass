@@ -42,6 +42,7 @@ jobs:
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
+      
         # Set the Azure subscription
         az account set --subscription '${{parameters.subscriptionid}}'
         
