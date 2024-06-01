@@ -29,7 +29,7 @@ parameters:
 variables:
   - group: ${{ parameters.environment }}
   - name: keyVaultName
-    value: 'devvmkv01'
+    value: 'devkvlab01'
 jobs:
 - job: RunAzureCLI
   pool:
