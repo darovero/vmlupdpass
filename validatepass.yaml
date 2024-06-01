@@ -22,7 +22,7 @@ variables:
   - group: ${{ parameters.environment }}
 
 jobs:
-- job: RunAzureCLI
+- job: ValidatePasswordExpirationTime
   pool:
     vmImage: 'ubuntu-latest'
 
@@ -45,4 +45,4 @@ jobs:
               --command-id RunShellScript \
               --scripts "sudo chage -l $user | grep 'Password expires' | awk -F': ' '{print \"User: $user, Password expires: \" \$2}'"
         done
-    displayName: 'Run Azure CLI command for multiple users'
+    displayName: 'Run Azure CLI command for one or multiple users'
