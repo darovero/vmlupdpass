@@ -2,6 +2,11 @@ trigger:
 - none
 
 parameters:
+- name: subscriptionid
+  displayName: 'Subscription Id'
+  type: string
+  values:
+    - 'c7142d9c-6420-4b6d-a608-d8b19fd4604b'
 - name: resourcegroup
   displayName: 'Resource Group Name'
   type: string
@@ -40,6 +45,10 @@ jobs:
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
+        # Set the Azure subscription
+        az account set --subscription '${{parameters.subscriptionid}}'
+      
+        # Update password users
         az vm user update \
           --resource-group '${{parameters.resourcegroup}}' \
           --name '${{parameters.vm_name}}' \
