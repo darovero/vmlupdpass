@@ -28,7 +28,8 @@ parameters:
 
 variables:
   - group: ${{ parameters.environment }}
-
+  - name: keyVaultName
+    value: 'devvmkv01'
 jobs:
 - job: RunAzureCLI
   pool:
@@ -56,4 +57,15 @@ jobs:
           --username '${{parameters.users_name}}' \
           --password '$(NewPassword)'
           echo "The password change of the ${{parameters.users_name}} user was successful."
-    displayName: 'Run Azure CLI command for change password linux user'
+
+        # Create secrets in Key Vault
+        az keyvault secret set \
+          --name '${{parameters.vm_name}}-${{parameters.users_name}}' \
+          --vault-name '$(keyVaultName)' \
+          --value 'your-secret-value'
+
+        az keyvault secret set \
+          --name '${{parameters.vm_name}}-password' \
+          --vault-name '$(keyVaultName)' \
+          --value 'your-password'
+    displayName: 'Run Command for change password user and create secrets in Key Vault'
