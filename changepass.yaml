@@ -16,9 +16,9 @@ parameters:
 - name: users_name
   displayName: 'Users Name'
   type: string
-- name: password
-  displayName: 'Password'
-  type: string
+# - name: password
+#   displayName: 'Password'
+#   type: string
 - name: environment
   displayName: 'Environment'
   type: string
@@ -54,6 +54,6 @@ jobs:
           --resource-group '${{parameters.resourcegroup}}' \
           --name '${{parameters.vm_name}}' \
           --username '${{parameters.users_name}}' \
-          --password '${{parameters.password}}'
+          --password '$(NewPassword)'
           echo "The password change of the ${{parameters.users_name}} user was successful."
     displayName: 'Run Azure CLI command for change password linux user'
