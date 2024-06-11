@@ -10,6 +10,8 @@ parameters:
 - name: resourcegroup
   displayName: 'Resource Group Name'
   type: string
+  values:
+    - 'devk8slab01'
 - name: vm_name
   displayName: 'Virtual Machine Name'
   type: string
