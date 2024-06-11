@@ -33,7 +33,7 @@ variables:
   - name: keyVaultName
     value: 'devkvlab01'
 jobs:
-- job: RunAzureCLI
+- job: UpdatePasswordUser
   pool:
     vmImage: 'ubuntu-latest'
 
