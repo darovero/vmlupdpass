@@ -15,7 +15,7 @@ parameters:
 - name: vm_name
   displayName: 'Virtual Machine Name'
   type: string
-- name: users_name
+- name: user_name
   displayName: 'User Name'
   type: string
 - name: environment
