@@ -16,11 +16,8 @@ parameters:
   displayName: 'Virtual Machine Name'
   type: string
 - name: users_name
-  displayName: 'Users Name'
+  displayName: 'User Name'
   type: string
-# - name: password
-#   displayName: 'Password'
-#   type: string
 - name: environment
   displayName: 'Environment'
   type: string
@@ -56,13 +53,13 @@ jobs:
         az vm user update \
           --resource-group '${{parameters.resourcegroup}}' \
           --name '${{parameters.vm_name}}' \
-          --username '${{parameters.users_name}}' \
+          --username '${{parameters.user_name}}' \
           --password '$(NewPassword)'
-          echo "The password change of the ${{parameters.users_name}} user was successful."
+          echo "The password change of the ${{parameters.user_name}} user was successful."
 
         # Create secrets in Key Vault
         az keyvault secret set \
-          --name '${{parameters.vm_name}}-password-${{parameters.users_name}}' \
+          --name '${{parameters.vm_name}}-password-${{parameters.user_name}}' \
           --vault-name '$(keyVaultName)' \
           --value '$(NewPassword)'
     displayName: 'Run Command for change password user and create secrets in Key Vault'
