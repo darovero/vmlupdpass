@@ -54,7 +54,7 @@ jobs:
           --resource-group '${{parameters.resourcegroup}}' \
           --name '${{parameters.vm_name}}' \
           --username '${{parameters.user_name}}' \
-          --password '$(NewPassword)'
+          --password '$(NewUserPassword)'
           echo "The password change of the ${{parameters.user_name}} user was successful."
 
         # Create secrets in Key Vault
