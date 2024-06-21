@@ -61,5 +61,5 @@ jobs:
         az keyvault secret set \
           --name '${{parameters.vm_name}}-password-${{parameters.user_name}}' \
           --vault-name '$(keyVaultName)' \
-          --value '$(NewPassword)'
+          --value '$(NewUserPassword)'
     displayName: 'Run Command for change password user and create secrets in Key Vault'
