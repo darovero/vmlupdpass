@@ -31,21 +31,15 @@ variables:
     value: 'devkvlab01'
 jobs:
 - job: UpdatePasswordUser
-  pool:
-    vmImage: 'ubuntu-latest'
+  pool: AZ400-DFB-01
 
   steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '3.x'
-      addToPath: true
   - task: AzureCLI@2
     inputs:
       azureSubscription: '$(azureSubscription)'
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
-      
         # Set the Azure subscription
         az account set --subscription '${{parameters.subscriptionid}}'
       
@@ -55,11 +49,18 @@ jobs:
           --name '${{parameters.vm_name}}' \
           --username '${{parameters.user_name}}' \
           --password '$(NewUserPassword)'
-          echo "The password change of the ${{parameters.user_name}} user was successful."
+        echo "The password change of the ${{parameters.user_name}} user was successful."
+        
+        # Check and modify the username if necessary
+        if [ "${{parameters.user_name}}" == "app.site" ]; then
+          modified_user_name="app-site"
+        else
+          modified_user_name="${{parameters.user_name}}"
+        fi
 
         # Create secrets in Key Vault
         az keyvault secret set \
-          --name '${{parameters.vm_name}}-password-${{parameters.user_name}}' \
+          --name '${{parameters.vm_name}}-password-'$modified_user_name \
           --vault-name '$(keyVaultName)' \
           --value '$(NewUserPassword)'
     displayName: 'Run Command for change password user and create secrets in Key Vault'
